@@ -1,0 +1,23 @@
+{
+  "required_columns": [
+    "Pregnancies",
+    "Glucose",
+    "BloodPressure",
+    "SkinThickness",
+    "Insulin",
+    "BMI",
+    "DiabetesPedigreeFunction",
+    "Age"
+  ],
+  "numeric_columns": [
+    "Pregnancies",
+    "Glucose",
+    "BloodPressure",
+    "SkinThickness",
+    "Insulin",
+    "BMI",
+    "DiabetesPedigreeFunction",
+    "Age"
+  ],
+  "target": "Outcome"
+}
