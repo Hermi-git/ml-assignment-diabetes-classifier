@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 Diabetes Prediction System</h1>
+            <p class="subtitle">ML-based diabetes classification using Logistic Regression and Decision Tree</p>
+        </header>
+
+        <main>
+            <div class="form-section">
+                <h2>Patient Information</h2>
+                <form id="predictionForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="pregnancies">Pregnancies</label>
+                            <input type="number" id="pregnancies" name="Pregnancies" min="0" max="20" value="6" required>
+                            <small>Number of times pregnant</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="glucose">Glucose</label>
+                            <input type="number" id="glucose" name="Glucose" min="0" max="300" step="0.1" value="148" required>
+                            <small>Plasma glucose concentration (mg/dL)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bloodPressure">Blood Pressure</label>
+                            <input type="number" id="bloodPressure" name="BloodPressure" min="0" max="200" step="0.1" value="72" required>
+                            <small>Diastolic blood pressure (mm Hg)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="skinThickness">Skin Thickness</label>
+                            <input type="number" id="skinThickness" name="SkinThickness" min="0" max="100" step="0.1" value="35" required>
+                            <small>Triceps skin fold thickness (mm)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="insulin">Insulin</label>
+                            <input type="number" id="insulin" name="Insulin" min="0" max="1000" step="0.1" value="0" required>
+                            <small>2-Hour serum insulin (mu U/ml)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bmi">BMI</label>
+                            <input type="number" id="bmi" name="BMI" min="0" max="100" step="0.1" value="33.6" required>
+                            <small>Body mass index (kg/m²)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="diabetesPedigree">Diabetes Pedigree Function</label>
+                            <input type="number" id="diabetesPedigree" name="DiabetesPedigreeFunction" min="0" max="3" step="0.001" value="0.627" required>
+                            <small>Diabetes pedigree function</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" name="Age" min="1" max="120" value="50" required>
+                            <small>Age in years</small>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">🔍 Predict</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Reset</button>
+                        <button type="button" class="btn btn-secondary" onclick="loadSample()">📋 Load Sample</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="resultsSection" class="results-section" style="display: none;">
+                <h2>Prediction Results</h2>
+                
+                <div class="results-grid">
+                    <div class="result-card" id="lrCard">
+                        <h3>🤖 Logistic Regression</h3>
+                        <div class="result-content">
+                            <div class="prediction-label" id="lrPrediction">-</div>
+                            <div class="probability-bar">
+                                <div class="probability-fill" id="lrProbabilityBar"></div>
+                            </div>
+                            <div class="probability-text" id="lrProbability">-</div>
+                        </div>
+                    </div>
+
+                    <div class="result-card" id="dtCard">
+                        <h3>🌳 Decision Tree</h3>
+                        <div class="result-content">
+                            <div class="prediction-label" id="dtPrediction">-</div>
+                            <div class="probability-bar">
+                                <div class="probability-fill" id="dtProbabilityBar"></div>
+                            </div>
+                            <div class="probability-text" id="dtProbability">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-section">
+                    <h3>Model Comparison</h3>
+                    <div id="comparisonText" class="comparison-text"></div>
+                </div>
+            </div>
+
+            <div id="loadingSpinner" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Analyzing patient data...</p>
+            </div>
+
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+        </main>
+
+        <footer>
+            <p>ML Assignment - Diabetes Classification using Logistic Regression & Decision Tree</p>
+            <p><small>For educational purposes only. Not for medical diagnosis.</small></p>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
