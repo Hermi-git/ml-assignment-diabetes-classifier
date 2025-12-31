@@ -48,9 +48,11 @@ def load_diabetes_data():
         (df['BloodPressure'] > 80).astype(int)
     )
     
-    # Add some randomness
+    # Add controlled randomness to create more realistic class distribution
+    # Noise threshold: probability of random positive case regardless of risk score
+    NOISE_THRESHOLD = 0.7  # 30% chance of random noise affecting classification
     noise = np.random.random(n_samples)
-    df['Outcome'] = ((risk_score >= 3) | (noise > 0.7)).astype(int)
+    df['Outcome'] = ((risk_score >= 3) | (noise > NOISE_THRESHOLD)).astype(int)
     
     return df
 

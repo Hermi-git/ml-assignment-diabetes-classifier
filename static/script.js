@@ -1,3 +1,8 @@
+// Risk assessment thresholds based on diabetes probability
+// These thresholds are used for educational demonstration purposes
+const RISK_THRESHOLD_LOW = 30;    // Below 30%: Low risk
+const RISK_THRESHOLD_HIGH = 60;   // Above 60%: High risk, 30-60%: Moderate risk
+
 // API base URL
 const API_BASE_URL = '';
 
@@ -105,9 +110,9 @@ function displayResults(data) {
     // Add risk interpretation
     const avgProbability = (parseFloat(lrProbability) + parseFloat(dtProbability)) / 2;
     comparisonText += '<br><br><strong>Risk Assessment:</strong> ';
-    if (avgProbability < 30) {
+    if (avgProbability < RISK_THRESHOLD_LOW) {
         comparisonText += 'Low risk of diabetes based on provided information.';
-    } else if (avgProbability < 60) {
+    } else if (avgProbability < RISK_THRESHOLD_HIGH) {
         comparisonText += 'Moderate risk of diabetes. Regular monitoring recommended.';
     } else {
         comparisonText += 'High risk of diabetes. Medical consultation strongly recommended.';

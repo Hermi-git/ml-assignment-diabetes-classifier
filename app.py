@@ -8,17 +8,61 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
+from contextlib import asynccontextmanager
 import joblib
 import numpy as np
 import os
 from typing import Dict, List
 
 
-# Initialize FastAPI app
+# Global variables for models
+lr_model = None
+dt_model = None
+scaler = None
+feature_names = None
+
+
+def load_models():
+    """
+    Load trained models and preprocessing objects
+    """
+    global lr_model, dt_model, scaler, feature_names
+    
+    models_dir = 'saved_models'
+    
+    if not os.path.exists(models_dir):
+        raise FileNotFoundError(
+            f"Models directory '{models_dir}' not found. Please train the models first by running train_models.py"
+        )
+    
+    try:
+        lr_model = joblib.load(f'{models_dir}/logistic_regression_model.pkl')
+        dt_model = joblib.load(f'{models_dir}/decision_tree_model.pkl')
+        scaler = joblib.load(f'{models_dir}/scaler.pkl')
+        feature_names = joblib.load(f'{models_dir}/feature_names.pkl')
+        print("Models loaded successfully!")
+    except Exception as e:
+        raise RuntimeError(f"Error loading models: {str(e)}")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Lifespan event handler for startup and shutdown
+    """
+    # Startup: Load models
+    load_models()
+    yield
+    # Shutdown: cleanup if needed
+    pass
+
+
+# Initialize FastAPI app with lifespan
 app = FastAPI(
     title="Diabetes Prediction API",
     description="ML API for diabetes classification using Logistic Regression and Decision Tree",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # Add CORS middleware to allow frontend requests
@@ -69,44 +113,6 @@ class CombinedPredictionResponse(BaseModel):
     logistic_regression: PredictionResponse
     decision_tree: PredictionResponse
     features: Dict[str, float]
-
-
-# Global variables for models
-lr_model = None
-dt_model = None
-scaler = None
-feature_names = None
-
-
-def load_models():
-    """
-    Load trained models and preprocessing objects
-    """
-    global lr_model, dt_model, scaler, feature_names
-    
-    models_dir = 'saved_models'
-    
-    if not os.path.exists(models_dir):
-        raise FileNotFoundError(
-            f"Models directory '{models_dir}' not found. Please train the models first by running train_models.py"
-        )
-    
-    try:
-        lr_model = joblib.load(f'{models_dir}/logistic_regression_model.pkl')
-        dt_model = joblib.load(f'{models_dir}/decision_tree_model.pkl')
-        scaler = joblib.load(f'{models_dir}/scaler.pkl')
-        feature_names = joblib.load(f'{models_dir}/feature_names.pkl')
-        print("Models loaded successfully!")
-    except Exception as e:
-        raise RuntimeError(f"Error loading models: {str(e)}")
-
-
-@app.on_event("startup")
-async def startup_event():
-    """
-    Load models on startup
-    """
-    load_models()
 
 
 @app.get("/")

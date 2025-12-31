@@ -28,6 +28,7 @@ wheels/
 *.joblib
 *.h5
 models/
+saved_models/
 
 # Data
 data/
